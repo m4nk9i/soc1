@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
+using System.IO;
 
 namespace soc1
 {
@@ -20,7 +21,7 @@ namespace soc1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            initdb();
+           // initdb1();
 
         }
 
@@ -53,6 +54,59 @@ namespace soc1
             while (reader.Read())
                 Console.WriteLine("Name: " + reader["name"] + "\tScore: " + reader["score"]);
             Console.ReadLine();
+
+
+        }
+
+        private void initdb1()
+        {
+            SQLiteConnection m_dbConnection;
+            //SQLiteConnection.CreateFile("liga.sqlite");
+            //SQLite
+            string sql;
+            SQLiteCommand command;
+
+            m_dbConnection = new SQLiteConnection("Data Source=liga.sqlite;Version=3;");
+            m_dbConnection.Open();
+
+
+            /*       string sql = "create table highscores (name varchar(20), score int)";
+                   SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                   command.ExecuteNonQuery();
+           */
+            StreamReader sr = new StreamReader("ligi.csv");
+            string ln;
+            string[] ll;
+            for (int i=0;i<462;i++)
+            {
+                ln = sr.ReadLine();
+                ll = ln.Split(',');
+                sql = "insert into zespoly (Z_NAZWA, Z_LIGA) values ('" + ll[1] + "'," + ll[0] + ")";
+                Console.WriteLine(sql);
+                command = new SQLiteCommand(sql, m_dbConnection);
+                command.ExecuteNonQuery();
+            }
+/*
+            for (int i = 0; i < 27; i++)
+            {
+                ln = sr.ReadLine();
+                ll = ln.Split(',');
+                sql = "insert into ligi (L_NAZWA) values ('" + ll[1] + "')";
+                command = new SQLiteCommand(sql, m_dbConnection);
+                command.ExecuteNonQuery();
+                Console.WriteLine(sql);
+            }
+
+            */
+
+            /*
+            sql = "select * from highscores order by score desc";
+            command = new SQLiteCommand(sql, m_dbConnection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+                Console.WriteLine("Name: " + reader["name"] + "\tScore: " + reader["score"]);
+            Console.ReadLine();
+            */
 
 
         }
